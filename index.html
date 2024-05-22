@@ -11,33 +11,29 @@
 
     <script>
         document.getElementById('sendRequest').addEventListener('click', () => {
-            fetch('/api/config')  // This would be your configuration endpoint
-                .then(response => response.json())
-                .then(config => {
-                    const url = config.functionUrl;
-                    const data = {
-                        message: "This is a test log entry from web app"
-                    };
+            // The function key will be injected at build time
+            const url = `${window.FUNCTION_URL}?code=${window.FUNCTION_KEY}`;
+            const data = {
+                message: "This is a test log entry from web app"
+            };
 
-                    fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(data)
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok ' + response.statusText);
-                        }
-                        return response.json();
-                    })
-                    .then(data => console.log('Success:', data))
-                    .catch((error) => {
-                        console.error('Error:', error);
-                    });
-                })
-                .catch(error => console.error('Error fetching config:', error));
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => console.log('Success:', data))
+            .catch((error) => {
+                console.error('Error:', error);
+            });
         });
     </script>
 </body>
