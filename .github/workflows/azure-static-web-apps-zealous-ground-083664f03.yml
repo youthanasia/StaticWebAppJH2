@@ -25,13 +25,12 @@ jobs:
           node-version: '14'
       - name: Install dependencies
         run: npm install
-      - name: Build project
-        env:
-          FUNCTION_URL: 'https://accesslogcreatorjh-fa.azurewebsites.net/LogAccessFunction'
-          FUNCTION_KEY: ${{ secrets.AZURE_FUNCTION_KEY }}
+      - name: Create env.js file
         run: |
-          echo "window.FUNCTION_URL='${FUNCTION_URL}'; window.FUNCTION_KEY='${FUNCTION_KEY}';" > ./public/env.js
-          npm run build
+          mkdir -p ./public
+          echo "window.FUNCTION_URL='${{ secrets.FUNCTION_URL }}'; window.FUNCTION_KEY='${{ secrets.AZURE_FUNCTION_KEY }}';" > ./public/env.js
+      - name: Build project
+        run: npm run build
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
@@ -43,7 +42,7 @@ jobs:
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
           app_location: "/" # App source code path
           api_location: "" # Api source code path - optional
-          output_location: "/" # Built app content directory - optional
+          output_location: "dist" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
