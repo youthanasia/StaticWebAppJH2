@@ -19,31 +19,19 @@ jobs:
         with:
           submodules: true
           lfs: false
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '14'
-      - name: Install dependencies
-        run: npm install
       - name: Create env.js file
         run: |
           mkdir -p ./public
-          echo "window.FUNCTION_URL='${{ secrets.FUNCTION_URL }}'; window.FUNCTION_KEY='${{ secrets.AZURE_FUNCTION_KEY }}';" > ./public/env.js
-      - name: Build project
-        run: npm run build
-      - name: Build And Deploy
+          echo "window.FUNCTION_URL='https://accesslogcreatorjh-fa.azurewebsites.net/LogAccessFunction'; window.FUNCTION_KEY='${{ secrets.AZURE_FUNCTION_KEY }}';" > ./public/env.js
+      - name: Deploy to Azure Static Web Apps
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
           action: "upload"
-          ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
-          # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
-          app_location: "/" # App source code path
-          api_location: "" # Api source code path - optional
-          output_location: "dist" # Built app content directory - optional
-          ###### End of Repository/Build Configurations ######
+          app_location: "/" # Root directory of your app
+          output_location: "/" # Output directory, for static sites this is usually the same as app_location
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
