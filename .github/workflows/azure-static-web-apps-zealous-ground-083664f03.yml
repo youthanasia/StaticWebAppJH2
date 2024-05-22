@@ -19,10 +19,11 @@ jobs:
         with:
           submodules: true
           lfs: false
+
       - name: Create env.js file
         run: |
-          mkdir -p ./public
-          echo "window.FUNCTION_URL='https://accesslogcreatorjh-fa.azurewebsites.net/LogAccessFunction'; window.FUNCTION_KEY='${{ secrets.AZURE_FUNCTION_KEY }}';" > ./public/env.js
+          echo "window.FUNCTION_URL='https://accesslogcreatorjh-fa.azurewebsites.net/LogAccessFunction'; window.FUNCTION_KEY='${{ secrets.AZURE_FUNCTION_KEY }}';" > ./env.js
+
       - name: Deploy to Azure Static Web Apps
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
