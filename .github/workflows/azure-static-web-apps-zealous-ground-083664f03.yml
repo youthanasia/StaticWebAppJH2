@@ -26,9 +26,12 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build project
-        run: npm run build
         env:
-          VITE_FUNCTION_KEY: ${{ secrets.AZURE_FUNCTION_KEY }}
+          FUNCTION_URL: 'https://accesslogcreatorjh-fa.azurewebsites.net/LogAccessFunction'
+          FUNCTION_KEY: ${{ secrets.AZURE_FUNCTION_KEY }}
+        run: |
+          echo "window.FUNCTION_URL='${FUNCTION_URL}'; window.FUNCTION_KEY='${FUNCTION_KEY}';" > ./public/env.js
+          npm run build
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
