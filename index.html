@@ -11,28 +11,33 @@
 
     <script>
         document.getElementById('sendRequest').addEventListener('click', () => {
-            const url = 'https://accesslogcreatorjh-fa.azurewebsites.net/LogAccessFunction?code=uwWuh8lMqwrvSSyql-n_zkPBNDcoWsEO_nteDFasptL9AzFu5PvKuw==';
-            const data = {
-                message: "This is a test log entry from web app"
-            };
+            fetch('/api/config')  // This would be your configuration endpoint
+                .then(response => response.json())
+                .then(config => {
+                    const url = config.functionUrl;
+                    const data = {
+                        message: "This is a test log entry from web app"
+                    };
 
-            fetch(url, {
-                method: 'POST', // or 'GET' depending on your function
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok ' + response.statusText);
-                }
-                return response.json();
-            })
-            .then(data => console.log('Success:', data))
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok ' + response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .then(data => console.log('Success:', data))
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+                })
+                .catch(error => console.error('Error fetching config:', error));
         });
     </script>
 </body>
