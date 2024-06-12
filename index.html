@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test Azure Function</title>
-    <script src="/env.js"></script>
+    <script src="/env.js"></script> <!-- Include the env.js file -->
 </head>
 <body>
     <h1>Test Azure Function from Web App</h1>
@@ -12,6 +12,7 @@
 
     <script>
         document.getElementById('sendRequest').addEventListener('click', () => {
+            // Construct the URL from env.js variables
             const url = `${window.FUNCTION_URL}?code=${window.FUNCTION_KEY}`;
             const data = {
                 message: "This is a test log entry from web app"
